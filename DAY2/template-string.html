@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <title>탬플릿 문자열 실습</title>
+    </head>
+
+    <body>
+        <h1>탬플릿 문자열 실습해 보기</h1>
+        <script>
+            // 전통적인 JS 문법으로 문자열 조합 후 출력해 보기: 문자열 조합할 땐 탬플릿 문자열을 사용
+            const name = 'MyeongGyu.LEE'
+            const age=50;
+            let address ='경기도 성남시 수정구'
+            let introduction='자기소개'
+            introduction += '입니다.'
+            
+            // 기존 방식으로 문자열 조합해 보기 
+            let myProfile="제 이름은" + name + "이고, 나이는 " + age + "살, 사는 곳은 " + address + ", 저를 간단히 소개하면: " + introduction;
+            console.log(myProfile)
+
+            // ES2015에 새로 도입된 탬플릿 문자열 활용해 문자열 조합해 보기 
+            // 기본 탬플릿은 `(백틱 문자열)를 사용해 구성 후, 원하는 위치에 ${변수명}을 지정해 할당하는 방식으로 사용
+            let myProfile2 = `제 이름은 ${name}이고, 나이는 ${age}살, 사는 곳은 ${address}, 저를 간단히 소개하면: ${introduction}`;
+            console.log(myProfile2)
+        </script>
+
+    </body>
+</html>

@@ -1,0 +1,66 @@
+<html>
+    <head>
+        <title>자바스크립트 변수 상수 실습</title>
+    </head>
+
+    <body>
+        <h1>자바스크립트 변수/상수 실습</h1>
+        
+        <!-- 스크립트 코드는 <script> 태그 안에 정의한다.  -->
+        <script> // 클라이언트 사이드(브라우저)에서 실행되는 블럭
+            // 자바스크립트 언어 주석은 `//`
+            // JS 코딩 주의사항: JS는 대소문자 구분!!
+            var userName = 'MyeongGyu.LEE';  // 보통 JS에서는 camel 표기법으로 메모리 할당 
+            var age = 50;
+            var price = 5000;
+            var isMale = true;
+
+            console.log('너의 이름은?', userName) // 브라우저 개발자 도구의 console 탭에 로그 출력
+
+            // 기본배송비를 var로 정의해보기
+            var baseDelyFee = 3000;
+            baseDelyFee = 10000;
+            console.log('전통적인 JS 변수 예약어 var는 상수로 사용할 수 없음')
+
+            // ES2015에 새로 생긴 상수 선언 예약어로 기본 배송비 정의해보기 
+            const defaultDelyFee = 3000;
+            console.log('기본배송비 상수값 출력:', defaultDelyFee)
+            
+            // 총 결제비용 변수 선언해보기 
+            let totalPayPrice = 0; // var과 동일한, 2015년 새로 도입된 변수 예약어 (var->const, let으로 분기됨)
+            
+            // 총 결제 비용에 기본배송비(const)를 더한다. 
+            totalPayPrice += defaultDelyFee;
+            console.log('현재 총 결제비용:', totalPayPrice)
+
+            // block scope에 대해 알아보자. 
+            // blockscope란? : if/for 구문과 같이 조건/반복구문 안의 제어 범위를 말함. 
+            // var 변수 선언 방식은 blockscope 개념 적용이 안됨!! -> const, let은 적용됨. 
+            // blockscope 내에서 선언된 let, const는 scope 밖에서 사용 불가능
+            if (isMale == true){
+                var sample = 'var 샘플데이터 변수입니다.' // var로 선언된 변수는 scope 밖에서도 접근 가능
+                const sample1 = 'const 샘플데이터 변수입니다.'
+                let sample2 = 'let 샘플데이터 변수입니다. '
+                
+                console.log('당신은 남자입니다.')
+
+                // blockscope 안에서 정의된 let, const는 scope 내에서는 정상사용 가능 
+                console.log('let, const sample 변수 출력:', sample1, sample2)
+            }
+            else{
+                console.log('당신은 여자입니다.')
+            }
+
+            sample = '변경된 sample var'
+            console.log('if 구문 안에서 정의된 sample var 변수 출력하기:', sample)
+
+            // if 구문 안에서 선언된 let, const를 scope 밖에서 사용해보기 
+            console.log('if문 안의 const sample1 를 호출해 보자:', sample1)
+            console.log('if문 안의 let sample2 를 호출해 보자:', sample2)
+
+        </script>
+        <!-- script는 HTML 스크립트의 모든 요소가 적재된 후 실행되는 것이 유리하므로 보통 문서 하단(</body>)에 위치시킴. -->
+        
+    </body>
+
+</html>

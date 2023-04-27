@@ -1,0 +1,68 @@
+<html>
+    <head>
+        <title>배열과 객체의 비구조화 할당 실습</title>
+    </head>
+
+    <body>
+        <h1>배열과 객체의 비구조화 할당 실습</h1>
+        <script>
+            // 자바스크립트 배열을 만들어 보기 
+            const books = ['React', 'Vue', 'Angular', 'Svelt', 'Jquery']; 
+
+            // 배열 안의 첫 번째 인덱스 추출, 두 번째 인덱스 인덱싱해보기
+            var book1 = books[0]; // 배열의 첫 번째 인덱스 추출해 변수에 할당 
+            var book2 = books[1];
+            var book3 = books[2];
+
+            console.log('전통적인 JS 배열 인덱싱:', book1, book2, book3)
+
+            // 신규 문법인 비구조화 할당 방식으로 배열에서 값 추출 후 변수에 할당 
+            const [book4, book5] = ['Node.JS', 'JAVA', 'Python', 'PHP', 'C#'];
+            console.log('비구조화 할당 방식으로 값이 할당된 상수를 출력해 보기: ', book4, book5);
+
+            // 비구조화 할당 방식 실습 2
+            // ...extraBooks는 첫 번째 할당된 문자열을 제외한 나머지 값들을 배열로 반환 
+             const [book6, ...extraBooks] = ['Node.JS', 'JAVA', 'Python', 'PHP', 'C#'];
+             console.log('추출된 첫 번째 값: ', book6);
+             console.log('추출된 나머지 배열 값:', extraBooks)
+
+            // 비구조화 할당 방식 실습 3
+            const [book7, book8, book9, book10, book11, book12='Rust'] = ['Node.JS', 'JAVA', 'Python', 'PHP', 'C#'];
+            console.log('비구조화 할당된 상수를 모두 출력해보자. ', book7, book8, book9, book10, book11, book12)
+
+            // 객체의 속성값을 비구조화 할당 방식으로 구현해 보기 
+            // 전통적으로 객체 속성값을 추출해 변수에 할당하는 방법
+            const trendTech = {
+                frontend:'React.js', 
+                backend: 'JAVA',
+                server:'Linux', 
+                rdbms:'PostgreSQL',
+                noSQL:'MongoDB', 
+                infra: 'AWS'
+            };
+            
+            // 객체 속성의 값을 추출해 변수나 상수에 할당하는 구조화된 할당 방식
+            const top1FrontendTech = trendTech.frontend
+            const top1backendTech = trendTech.backend
+            
+            console.log('기존 사용되던 JS 속성값을 변수/상수에 할당 방식:', top1FrontendTech, top1backendTech)
+
+            // 비구조화 할당 문법 이용 객체 속성값 할당해 보기 
+            // 객체 속성명과 동일한 이름으로 설정하면 
+            const {frontend, backend, server, getAuthor} = {
+                frontend:'React.js', 
+                backend: 'JAVA',
+                server:'Linux', 
+                rdbms:'PostgreSQL',
+                noSQL:'MongoDB', 
+                infra: 'AWS', 
+                getAuthor:function(){
+                    return "MyeongGyu.LEE";
+                }
+            };
+
+            console.log('객체의 비구조화 할당 방식으로 선언된 상수와 함수를 실행해 보기:', frontend, backend, server, getAuthor());
+        </script>
+
+    </body>
+</html>

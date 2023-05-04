@@ -1,0 +1,37 @@
+<html>
+    <head>
+        <style>
+            table {
+                width: 100%;
+                border: 1px solid #444444;
+                border-collapse: collapse;
+            }
+            th, td {
+                border: 1px solid #444444;
+            }
+        </style>
+
+        <title>회원 목록 페이지</title>
+
+        <body>
+            <h1>회원 목록 페이지</h1>
+
+            <table>
+                <tr>
+                    <!-- ?uid=1 쿼리 스트링 방식으로 profile에 전달 -->
+                    <td> <a href="/member/profile?uid=1">1</a> </td>
+                    <td>test@test.co.kr</td>
+                    <td>이명규</td>
+                </tr>
+
+                <tr>
+                    <!-- 파라미터 방식으로 profile에 전달 -->
+                    <td> <a href="/member/profile/2">2</a> </td>
+                    <td>test2@test.co.kr</td>
+                    <td>이명규2</td>
+                </tr>
+            </table>
+        </body>
+
+    </head>
+</html>

@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <title>신규회원가입</title>
+    </head>
+
+    <body>
+        <h1>신규회원 가입하기</h1>
+
+        <!-- 사용자로부터 입력받는 폼 요소들은 반드시 form tag 안에 정의되어야 함.  -->
+        <!-- form 태그는 action과 method라는 두 개의 핵심 속성이 존재
+        action은 form 태그 내에 사용자가 입력한 데이터를 어느 url 주소로 전달할지 지정. 
+        method는 form 태그 내에 사용자 입력 데이터를 어떤 방식으로 전달할지를 정의 -->
+        <form action="/member/regist" method="post">
+            이메일: <input type="text" name="email" placeholder="메일 주소를 입력해 주세요." /> <br>
+            비밀번호: <input type="password" name="password" /> <br>
+            이름: <input type="text" name="name" /> <br>
+            <input type="submit" value="등록" /> <br>
+
+        </form>
+    </body>
+</html>

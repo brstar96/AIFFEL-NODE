@@ -1,0 +1,43 @@
+<html>
+    <body>
+        <h1>기존 게시글 정보 확인/수정 FE페이지</h1>
+        <br>
+        제목: <input type="text" id="title" placeholder="제목을 입력해주세요." value=""/><br>
+        내용: <textarea rows="20" cols="10" id='contents' style="width:400px;"></textarea><br>
+        게시여부: <select id="display_yn">
+            <option value="Y">게시</option>
+            <option value="N">게시안함</option>
+        <hr>
+        <input type="button" value="수정" id='btnSave'/>
+
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+        <script>
+            $.urlParam = function(name){
+                //자바스크립트 정규식을 이용해 현재페이지 URL에서 전달받은 키값에 대한 쿼리스트링 값을 추출한다.
+                var results = new RegExp('[\?&]'+name+'=([^&#]*)').exec(window.location.href);
+                return results[1] || 0;
+            }
+            var aid = $.urlParam('aid')
+
+            // html document 렌더링이 끝나면 BE에서 해당 게시글 고유 번호를 기반으로 단일 게시글 정보를 조회해옴. 
+            // 조회된 JSON에서 속성값을 추출, 일일히 해당 요소의 value 속성에 값으로 바인딩해줌. 
+            $(document).ready(function(){ 
+                $.get(`http://localhost:3000/api/article/modify?aid=${aid}`, function(result){
+                    console.log('BE로부터 전달된 단일 게시글 정보 출력:', result)
+
+                    // 서버에서 가져온 단일 게시글 JSON 데이터의 title 속성값을 UI 요소의 value값으로 수동 바인딩 
+                    $('#title').val(result.title);
+                    $('#contents').val(result.contents);
+                    $('#display_yn').val(result.display_yn);
+                })
+            });
+
+            // 수정버튼이 클릭되면 백엔드 주소로 화면 요소의 값을 추출, 단일 JSON을 만들어 전달
+            $('#btnSave').click(function(){
+
+            })
+
+        </script>
+    </body>
+</html>

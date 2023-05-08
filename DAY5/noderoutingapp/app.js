@@ -11,6 +11,9 @@ var usersRouter = require('./routes/users');
 var memberRouter = require('./routes/member.js');
 var articleRouter = require('./routes/article.js');
 
+// 데이터만 처리하는 REST API 라우터
+var articleAPIRouter = require('./routes/article_api.js');
+
 var app = express(); 
 
 // view engine setup
@@ -28,6 +31,9 @@ app.use('/users', usersRouter);
 
 // 각종 라우터 파일의 주소 체계 정의하기
 app.use('/member', memberRouter);
+
+// 게시글 데이터 처리를 위한 REST API ejs 스크립트의 기본 주소 
+app.use('/api/articles', articleAPIRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

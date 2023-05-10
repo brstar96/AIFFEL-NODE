@@ -9,7 +9,6 @@ var usersRouter = require('./routes/users');
 
 // 개발자 정의 라우터 파일을 참조 
 var memberRouter = require('./routes/member.js');
-var articleRouter = require('./routes/article.js');
 
 // 데이터만 처리하는 REST API 라우터
 var articleAPIRouter = require('./routes/article_api.js');

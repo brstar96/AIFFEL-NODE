@@ -3,7 +3,19 @@
         <h1>게시글 목록 프론트엔드 페이지 </h1>
         <a href="./create.html"></a>
         <table>
-            <tbody id="list"></tbody>
+            <thead>
+                <tr>
+                    <th>글번호</th>
+                    <th>제목</th>
+                    <th>조회수</th>
+                    <th>ip주소</th>
+                    <th>수정일시</th>
+                    <th>게시자</th>
+                </tr>
+            </thead>
+            <tbody id="list">
+               
+            </tbody>
         </table>
 
         <!-- FE script -->
@@ -20,7 +32,7 @@
                     $.each(result, function(i, item){
                         var trTag = `<tr>
                             <td>${item.aid}</td>
-                            <td><a href='./modify.html?aid=${item.aid}'> ${item.title}</a></td>
+                            <td><a href="./modify.html?aid=${item.aid}">${item.title}</a></td>
                             <td>${item.view_cnt}</td>
                             <td>${item.ip_address}</td>
                             <td>${item.modify_date}</td>

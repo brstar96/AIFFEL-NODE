@@ -7,6 +7,8 @@
         게시여부: <select id="display_yn">
             <option value="Y">게시</option>
             <option value="N">게시안함</option>
+        </select>
+        <br>
         <hr>
         <input type="button" value="수정" id='btnSave'/>
 
@@ -30,12 +32,35 @@
                     $('#title').val(result.title);
                     $('#contents').val(result.contents);
                     $('#display_yn').val(result.display_yn);
-                })
+                });
             });
 
             // 수정버튼이 클릭되면 백엔드 주소로 화면 요소의 값을 추출, 단일 JSON을 만들어 전달
             $('#btnSave').click(function(){
+                //일일이 UI요소의 특성값으로 UI요소의 입력값을 추출하고 서버로 전달한 데이터소스에 값을 넣어주는 행위
+                //이런방식의 개발패턴을 MVP(Model,View,Presenter)방식이라고 합니다.
+                //MVVM(Model,View,ViewModel) 데이터 바인딩 패턴이 나오기전까지..모바일/웹개발/윈도우 설치형(윈폼)개발시 
+                //가장 많이 사용한 ui개발 패턴임.
+                //UI HTML요소(태그)에 사용자 입력한 데이터를 추출한다.
+                var title = $("#title").val();
+                var contents = $("#contents").val();
+                var display_yn = $("#display_yn").val();
 
+                //서버로 전달한 단일 게시글 JSON객체를 정의하고 값을 할당한다.
+                var article ={
+                    "aid":aid,
+                    "title":title,
+                    "contents":contents,
+                    "display_yn":display_yn
+                };
+
+                //백엔드 게시글 등록 REST API주소로 단일 JSON게시글 데이터를 전송 등록처리하고 결과값을 반환받습니다.
+                //jquery ajax 방식으로 post방식으로 데이터를 서버로 전송하고 결과값을 반환받느다.
+                $.post('http://localhost:3000/api/articles/modify',article).done(function(result){
+                    console.log("백엔드로부터 처리결과 반환값:",result);
+                    alert("수정완료!!!!");
+                    location.href = "./list.html";
+                });
             })
 
         </script>

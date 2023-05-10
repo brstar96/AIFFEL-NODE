@@ -10,35 +10,35 @@ router.get('/list', async(req, res)=>{
     // Step.1 DB에서 해당 테이블에 대한 모든 데이터 목록을 조회 
     var articles = [
         {
-            aid:1, 
-            title:'게시글 제목 1입니다.', 
-            contents:'게시글 내용 1입니다.', 
-            view_cnt:10, //조회수
-            display_yn: "Y", // 게시여부
-            ip_address: '111.111.111.111',
-            modify_date: Date.now(), 
-            modify_userid: 'eddy'
-        }, 
+            aid:1,
+            title:"게시글 제목1입니다.",
+            contents:"게시글 내용1입니다.",
+            view_cnt:10,
+            display_yn:"Y",
+            ip_address:"111.111.111.111",
+            modify_date:Date.now(),
+            modify_userid:"mgl1"
+        },
         {
-            aid:1, 
-            title:'게시글 제목 2입니다.', 
-            contents:'게시글 내용 2입니다.', 
-            view_cnt:12, //조회수
-            display_yn: "Y", // 게시여부
-            ip_address: '222.222.222.222',
-            modify_date: Date.now(), 
-            modify_userid: 'eddy'
-        }, 
+            aid:2,
+            title:"게시글 제목2입니다.",
+            contents:"게시글 내용2입니다.",
+            view_cnt:12,
+            display_yn:"Y",
+            ip_address:"122.111.111.111",
+            modify_date:Date.now(),
+            modify_userid:"mgl2"
+        },
         {
-            aid:1, 
-            title:'게시글 제목 3입니다.', 
-            contents:'게시글 내용 3입니다.', 
-            view_cnt:15, //조회수
-            display_yn: "N", // 게시여부
-            ip_address: '333.333.333.333',
-            modify_date: Date.now(), 
-            modify_userid: 'annie'
-        }, 
+            aid:3,
+            title:"게시글 제목3입니다.",
+            contents:"게시글 내용3입니다.",
+            view_cnt:13,
+            display_yn:"N",
+            ip_address:"123.111.111.111",
+            modify_date:Date.now(),
+            modify_userid:"mgl3"
+        }
     ];
 
     // 클라이언트에 JSON 데이터 응답 처리

@@ -1,11 +1,30 @@
 // 게시글 정보 관리를 웹 페이지 요청, 응답 관리를 위한 라우터 스크립트
 // 기본 라우팅 주소: localhost:3000/article/~
-
 var express = require('express')
 var router = express.Router();
 
+// url 주소에서 특정 파라미터(query string) 값이 있고 없고를 체크하는 미들웨어 임포트 
+const {checkParams, checkQueryKey} = require('./middleware.js');
+
+
+//라우터 미들웨어 샘플 1 - 이 라우터 스크립트가 호출되는 순간 무조건 실행되는 미들웨어 
+router.use(function (req, res, next) {
+    console.log('라우터 미들웨어 샘플1 :', Date.now());
+    next();
+});
+
+//라우터 미들웨어 샘플 2
+router.use('/sample/:id', function(req, res, next) {
+    console.log('Index 라우터 미들웨어 샘플2 Request URL:', req.originalUrl);
+    next();
+}, function (req, res, next) {
+    console.log('Index 라우터 미들웨어 샘플3 Request Type:', req.method);
+    next();
+});
+
 // 게시글 정보 조회 및 조회 결과 웹페이지 요청/응답 처리 라우팅 메소드 
-router.get('/list', async(req, res)=>{
+// async 앞에 라우터 미들웨어를 포함하면 먼저 미들웨어 실행 후 뒤의 콜백함수 호출 
+router.get('/list', checkQueryKey, async(req, res)=>{ 
     // 전체 게시글 정보를 DB에서 최초 조회해 온다고 가정. 
     var articles = [ 
         { 

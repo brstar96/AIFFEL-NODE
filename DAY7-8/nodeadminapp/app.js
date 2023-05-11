@@ -30,6 +30,20 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// 어플리케이션 미들웨어 샘플 1 (어플리케이션 전역에서 요청 들어올 때마다 실행되는 기능.)
+app.use(function(req, res, next) {
+  console.log('어플리케이션 미들웨어 호출:', Date.now());
+  next(); // 미들웨어 기능 처리 후 원래 요청했던 부분으로 돌아가라는 키워드
+});
+
+//어플리케이션 미들웨어 샘플 2
+app.use('/user/:id', function (req, res, next) {
+const uid = req.params.id;
+console.log('어플리케이션 미들웨어 호출2 요청유형:', req.method);
+res.send("사용자정보:"+uid); // text, HTML tag, json 등등 다양한 객체를 전달해줄 수 있음. 
+// 단, 로직의 복잡도가 올라가므로 가급적 send 사용 지양
+});
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/article', articleRouter); // 기본 주소 정의

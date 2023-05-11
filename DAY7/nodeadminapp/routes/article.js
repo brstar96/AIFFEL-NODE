@@ -87,13 +87,37 @@ router.post('/list', async(req, res)=>{ // localhost:3000/article/list
 
 // // -- Part1 --
 
-// 게시글 등록 웹페이지 요청/응답 처리 라우팅 메소드 
+// 게시글 등록 웹페이지 get 요청/응답 처리 라우팅 메소드 
 router.get('/create', async(req,res)=>{
     res.render('article/create.ejs')
-}); // 일단 get으로 불러오고 시작(localhost:3000/article/create)
+}); // 일단 get으로 등록 페이지를 렌더링하고 시작(localhost:3000/article/create)
 
-// // 사용자가 입력한 게시글 등록데이터 처리 요청 및 응답 라우팅 메소드
-// router.post();
+// 사용자가 입력한 게시글 등록데이터 처리 요청 및 응답 라우팅 메소드
+// create.ejs의 <!--우측 콘텐츠 영역 -->에 form 태그로 감싼 부분에서, 버튼 typ을 'submit'으로 설정하고 아래 라우터 주소를 넣었음!
+
+router.post('/create', async(req, res)=>{ // localhost:3000/article/create
+    // Step 1.사용자 입력한 게시글 데이터를 form 각 요소로부터 추출
+    var title = req.body.title; // req.body에 따라오는 값들은 태그의 name 속성에 입력한 값임!!
+    var contents = req.body.contents
+    var display_yn = req.body.display_yn
+
+    // Step 2. form에서 전달된 사용자 입력값을 DB의 게시글 테이블에 저장
+    // 모든 RDBMS는 INSERT를 통해 데이터를 테이블에 넣게 되어 있으며, 실제 저장된 데이터를 백엔드 호출 메소드로 반환해줌. 
+    // 여기서는 INSERT한 후 동일 데이터를 반환받은 게 article이라고 가정 
+    var article = {
+        aid:'1', 
+        title:'새로 게시된 게시글 1 제목입니다.', 
+        contents:'새로 게시된 게시글 1 내용입니다', 
+        view_cnt:1, 
+        display_yn:'N', 
+        regist_date:Date.now(), 
+        regist_user: 'mgl'
+    }
+
+    // 등록완료 후 게시글 리스트 페이지로 리다이렉팅
+    // 뷰의 경로가 절대 아닌, 이동 희망하는 도메인을 뺀 주소 기입. 
+    res.redirect('/article/list'); 
+}); 
 
 // // -- Part2 --
 
@@ -115,7 +139,27 @@ router.get('/modify/:aid', async(req, res)=>{
 }); // localhost:3000/article/modify/1
 
 // // 사용자가 수정한 게시글 정보처리 요청 및 응답 처리 라우팅 메소드
-// router.post(); 
+router.post('/modify/:aid', async(req, res)=>{
+    // Step 1. 수정하려는 게시글 고유번호 추출 (2가지)
+    //  - 방법 1: parameter값을 추출하는 방법 - 파라미터 방식으로 넘겨받는 경우는 req.params 활용
+    var aid = req.params.aid;
+    //  - 방법 2: form 태그 내 hidden 요소가 있으면 hidden 태그의 name 값으로 추출
+    // var aid = req.body.aid;
+
+    // Step 2. 사용자가 수정한 게시글 form 태그 내 요소값들을 추출
+    var title = req.body.aid;
+    var contents = req.body.contents;
+    var display_yn = req.body.display_yn;
+
+    // Step 3. DB의 게시글 정보를 수정 처리하기 - DB에 전달할 수정 데이터를 먼저 정의
+    var article = {
+        title, 
+        contents, 
+        display_yn
+    }
+    // Step 4. 수정 데이터가 DB에 반영 완료되면 게시글 목록 페이지로 이동
+    res.redirect('/article/list')
+}); 
 
 // // -- Part3 --
 

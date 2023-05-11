@@ -164,6 +164,16 @@ router.post('/modify/:aid', async(req, res)=>{
 // // -- Part3 --
 
 // // 선택 게시글 삭제 처리 요청 및 응답처리 라우팅 메소드 
-// router.get();
+router.get('/delete',async(req, res)=>{
+    // 게시글 고유 번호를 추출 (query string으로 넘어온 데이터는 req.query로 접근)
+    var aid = req.query.aid;
+
+    // DB의 테이블에서 해당 게시글을 영구 삭제 처리(여기서는 했다고 가정)
+
+
+    // 게시글 목록 페이지로 다시 이동시키기
+    res.redirect('/article/list')
+
+}); // localhost:3000/article/delete?aid=1
 
 module.exports = router;

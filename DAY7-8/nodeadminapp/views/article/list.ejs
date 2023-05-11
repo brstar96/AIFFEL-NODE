@@ -1,0 +1,111 @@
+<!-- 
+<meta name="description" content="게시글 목록 페이지"/>
+<style>
+    h1{
+        color:red;
+    }
+</style> -->
+
+<!--우측 상단 헤더 영역 -->
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>게시글 정보 조회</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="/Home/Index">Home </a>> 
+            </li>
+            <li>
+                <a> 게시글 정보 조회 </a>> 
+            </li>
+            <li class="active">
+                <strong> 조회</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+
+<!--우측 콘텐츠 영역 -->
+<div class="wrapper wrapper-content">
+<!-- 조회 옵션 및 조회버튼 영역 -->
+<!-- form태그로 감싸야 사용자 작성 데이터가 특정 페이지(/article/list)로 넘어가게 됨 -->
+<form action="/article/list" method="post">
+    <div class="ibox-content m-b-sm border-bottom">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="control-label" for="OrderNo">제목</label>
+                    <input type="text" name="title" class="form-control">
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="control-label" for="OrderName">IP 주소</label>
+                    <input type="text" name="ipaddress" class="form-control">
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="control-label" for="MobileNo">사용여부</label>
+                    <select name="displayyn" class="form-control">
+                        <option value="">전체</option>
+                        <option value="Y">게시함</option>
+                        <option value="N">게시안함</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
+            <!-- 사용자가 form 태그 안에서 submit을 누를 때 지정된 페이지로 데이터를 전달하게 됨 (사용자 데이터를 전달하려면 form태그로 감싸야 함) -->
+            <button type="submit" class="btn btn-primary">조회</button> 
+            <a href="/article/create" class="btn btn-info">신규</a>
+        </div>
+    </div>
+</form>
+
+<!-- 조회 결과 목록 표시영역 -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-content">
+                <div class="table-responsive">
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th width="10%">글 순번</th>
+                                <th width="20%">제목</th>
+                                <th width="10%">조회수</th>
+                                <th width="20%">IP주소</th>
+                                <th width="10%">게시여부</th>
+                                <th width="10%">등록일</th>
+                                <th width="20%">등록자</th>
+                            </tr>
+                        </thead>
+                        <tbody class="hoverTblBody">
+                            
+                            <!-- ejs 반복문을 통해 조회된 데이터를 view -->
+                            <!-- 최근에는 이렇게 HTML 조작 부분을 FE를 통해 브라우저에서 수행하므로, 서버 부담이 경감되었음. -->
+                            <% for(var i=0; i<articles.length; i++) { %>
+                                <tr>
+                                    <td><a href="#"><%=articles[i].aid%></a></td>
+                                    <td><a href="/article/modify/<%=articles[i].aid%>"><%=articles[i].title%></a></td>
+                                    <td><%=articles[i].view_cnt%></td>
+                                    <td><%=articles[i].ip_address%></td>
+                                    <td><%=articles[i].display_yn%></td>
+                                    <td><%=articles[i].regist_date%></td>
+                                    <td><%=articles[i].regist_user%></td>
+                                </tr>
+                            <% } %>
+                            
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -4,6 +4,9 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+// 레이아웃 패키지 참조하기 
+var expressLayouts = require('express-ejs-layouts'); 
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var articleRouter = require('./routes/article') // 기본 라우터 정의
@@ -13,6 +16,13 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+// 레이아웃에 대한 설정 
+app.set('layout', 'layout'); // 모든 ejs 파일의 기본 레이아웃 ejs 파일명 지정 
+app.set("layout extractScripts", true); // 오리지널 콘텐츠 ejs 파일 내(list.ejs)의 script 태그를 레이아웃 페이지에 적용할지 여부 
+app.set("layout extractStyles", true); // 오리지널 콘텐츠 ejs 파일 내(list.ejs)의 style 태그를 레이아웃 페이지에 적용할지 여부 
+app.set("layout extractMetas", true);// 오리지널 콘텐츠 ejs 파일 내(list.ejs)의 meta 태그를 레이아웃 페이지에 적용할지 여부 
+app.use(expressLayouts);
 
 app.use(logger('dev'));
 app.use(express.json());

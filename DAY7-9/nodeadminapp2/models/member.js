@@ -2,7 +2,7 @@
 
 module.exports = function (sequelize, DataTypes) {
     return sequelize.define(
-    'member', // Node에서는 자동으로 무조건 테이블 이름을 복수로 생성함. 
+    'member', // Node에서는 단수로 테이블 이름 정의해도, 자동으로 무조건 테이블 이름을 복수로 생성함. 
     {
         member_id: {
             type: DataTypes.INTEGER,

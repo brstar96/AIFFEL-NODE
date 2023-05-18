@@ -7,6 +7,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var articleRouter = require('./routes/article') // 기본 라우터 정의
+var memberAPIRouter = require('./routes/memberAPI') // 기본 라우터 정의
 var sequelize = require('./models/index.js').sequelize;
 
 var app = express();
@@ -24,7 +25,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/article', articleRouter); // 기본 주소 정의
+app.use('/article', articleRouter); // 게시글 관리 주소
+app.use('/api/members', memberAPIRouter); // 회원정보 관리 주소
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

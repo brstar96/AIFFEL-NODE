@@ -1,0 +1,42 @@
+<html>
+    <head>
+        <title>회원목록 페이지</title>
+
+
+        <style>
+            table {
+                width: 100%;
+                border: 1px solid #444444;
+                border-collapse: collapse;
+            }
+
+            th, td {
+                border: 1px solid #444444;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <h1>회원 목록 페이지 </h1>
+
+        <table>
+
+            <!-- 쿼리스트링 방식으로 url호출주소내에 데이터를 포함시켜 프로필 페이지리를 요청함 -->
+            <tr>
+                <td> <a href="/members/profile?uid=1">1</a> </td>
+                <td>test@test.co.kr</td>
+                <td>강창훈</td>
+            </tr>
+
+            <!-- 파라메터방식으로 url 호출주소내에 데이터를 포함시켜 프로필 페이지를 요청함 -->
+            <tr>
+                <td><a href="/members/profile/2">2</a></td>
+                <td>test2@test.co.kr</td>
+                <td>강창훈2</td>
+            </tr>
+        </table>
+
+
+    </body>
+</html>

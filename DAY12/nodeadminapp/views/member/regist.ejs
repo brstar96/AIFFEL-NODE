@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <title>신규회원가입</title>
+    </head>
+
+    <body>
+
+        <h1>신규회원 가입하기</h1>
+
+        <!-- 사용자로부터 입력받는 폼요소들은 반드시 <form>태그안에 정의되어야합니다. -->
+        <!-- form태그는 action과 method라는 두개의 핵심 속성이 존재합니다.
+        action은 form태그내에 사용자가 입력한 데이터를 어느 url주소로 전달할지 지정하고
+        memthod는 form태그내에 사용자 입력데이터를 어떤 방식으로 전달할지를 정의합니다. -->
+
+        <form action="/member/regist" method="post">
+            이메일:<input type="text" name="email" placeholder="메일을 입력해주세요." /> <br>
+            암호:<input type="password" name="password" /> <br>
+            이름:<input type="text" name="name" /> <br>
+            <input type="submit" value="등록" />
+        </form>
+
+    </body>
+</html>

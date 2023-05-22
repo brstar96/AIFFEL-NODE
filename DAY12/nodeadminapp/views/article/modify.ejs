@@ -107,7 +107,7 @@
 
             <!--우측 콘텐츠 영역 -->
             <div class="wrapper wrapper-content">
-            <form id="articleForm" action="/article/modify/<%=article.aid%>" method="post">
+            <form id="articleForm" action="/article/modify/<%=article.article_id%>" method="post">
                 <div class="ibox-content m-b-sm border-bottom">
 
                     <div class="row">
@@ -134,8 +134,8 @@
                             <div class="form-group">
                                 <label class="control-label">게시여부</label>
                                 <select class="form-control" id="display_yn" name="display_yn">
-                                    <option value="Y" <% if(article.display_yn == "Y"){ %>selected<% } %>> 게시함</option>
-                                    <option value="N" <% if(article.display_yn == "N"){ %>selected<% } %>> 게시 안함</option>
+                                    <option value=1 <% if(article.is_display_code == 1){ %>selected<% } %>> 게시함</option>
+                                    <option value=0 <% if(article.is_display_code == 0){ %>selected<% } %>> 게시 안함</option>
                                 </select>
 
                             </div>
@@ -146,9 +146,10 @@
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary">저장</button>
                         <a href="/article/list" class="btn btn-info">목록</a>
+                        <button type="button" id="btnDelete" class="btn btn-danger">삭제</button>
                         
                         <!-- article.js의 라우터 내부에서 req.body를 통해 form요소에서 데이터 추출하는 것처럼 name 추출 가능.  -->
-                        <input type="hidden" name='aid' value="<%=article.aid%>" /> 
+                        <input type="hidden" name='aid' value="<%=article.article_id%>" /> 
                     </div>
 
                 </div>
@@ -204,6 +205,29 @@
             return true;
         });
     </script>
+
+    <script>
+        //articleForm 폼태그에서 onsubmit이벤트가 발생하면 폼태그내 각종
+        //입력요소들의 유효성검사를 실시후 action에지정된 페이지로 데이터를 보낸다.
+        $("#articleForm").submit(function(){
+            if($("#title").val() == ""){
+                alert("제목을 입력해주세요.");
+                $("#title").focus();
+                return false;
+            }
+            return true;
+        });
+        //삭제버튼이 클릭되면 재확인 confirm창을 오픈하고
+        //확인이 눌리면 삭제 url주소를 호출한다.
+        $("#btnDelete").click(function(){
+            if(confirm('정말로 삭제하시겠습니까?')){
+                //confirm창에서 확인버튼을 클릭하면 true이 반환되어 if블럭 요기가 실행됨
+                location.href = "/article/delete?aid="+$("#aid").val();
+            }else{
+                //confirm창에서 취소버튼을 클릭하면 실행되는영역
+            }
+        });
+    </script>   
 
 </body>
 

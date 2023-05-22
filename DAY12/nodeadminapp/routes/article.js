@@ -1,43 +1,32 @@
 // 게시글 정보 관리를 웹 페이지 요청, 응답 관리를 위한 라우터 스크립트
 // 기본 라우팅 주소: localhost:3000/article/~
-
+var moment = require('moment')
 var express = require('express')
 var router = express.Router();
 
+var db = require('../models/index.js');
+var { Op } = require('sequelize') // ORM 오퍼레이터 객체(조건연산자) 참조 
+const { QueryTypes} = db.sequelize;
+const article = require('../models/article.js');
+
 // 게시글 정보 조회 및 조회 결과 웹페이지 요청/응답 처리 라우팅 메소드 
 router.get('/list', async(req, res)=>{
-    // 전체 게시글 정보를 DB에서 최초 조회해 온다고 가정. 
-    var articles = [ 
-        { 
-            aid:'1', 
-            title:'최초 게시글 1 제목입니다.', 
-            contents:'최초 게시글 1 내용입니다', 
-            view_cnt:1, 
-            display_yn:'N', 
-            regist_date:Date.now(), 
-            regist_user: 'mgl'
-        }, 
-        { 
-            aid:'2', 
-            title:'최초 게시글 2 제목입니다.', 
-            contents:'최초 게시글 2 내용입니다', 
-            view_cnt:1, 
-            display_yn:'N', 
-            regist_date:Date.now(), 
-            regist_user: 'mgl2'
-        }, 
-        { 
-            aid:'3', 
-            title:'최초 게시글 3 제목입니다.', 
-            contents:'최초 게시글 3 내용입니다', 
-            view_cnt:1, 
-            display_yn:'N', 
-            regist_date:Date.now(), 
-            regist_user: 'mgl3'
-        }, 
-    ];
-    
-    res.render('article/list.ejs', {articles}); // view 전달
+    // DB 객체를 참조하기 (ORM operator 문법을 써야 DB 컨디셔닝 가능) 
+    // SELECT article_id, title, ip_address, is_display_code, view_count, reg_date, reg_member_id FROM article
+    // WHERE article_id > 0 ORDER BY view_count DESC;
+    var articles = await db.Article.findAll({
+        attributes:['article_id', 'title', 'ip_address', 'is_display_code', 'view_count', 'reg_date', 'reg_member_id'],
+        where:{article_id:{[Op.gt]: 0}}, // ORM 오퍼레이터를 통해 0 보다 큰 데이터 컨디셔닝 
+        order : [['view_count', 'DESC']] // 정렬
+    });
+
+    // 전체 게시글 개수 가져오기(articles len찍는게 더 낫지만, 여기서는 count 메소드 튜토리얼을 위해 아래 구문 실행)
+    var totalCount = await db.Article.count({
+        where:{article_id:{[Op.gt]: 0}}, // ORM 오퍼레이터를 통해 0 보다 큰 데이터 컨디셔닝 
+    });
+
+
+    res.render('article/list.ejs', {articles, moment, totalCount}); // view 전달
 }); // 일단 get으로 불러오고 시작(localhost:3000/article/list)
 
 // 게시글 조회 옵션에 따른 게시글 데이터 조회 처리 요청/응답 라우팅 메소드 
@@ -49,45 +38,25 @@ router.post('/list', async(req, res)=>{ // localhost:3000/article/list
     var ipaddress = req.body.ipaddress
     var displayyn = req.body.displayyn
 
-    // Step 2. 추출된 조회 옵션 데이터 기반으로 게시글 데이터 테이블에서 게시글 목록 조회해오기 
-    var articles = [ // 이 예제에서는 DB에서 조회해 왔다고 가정! (나중에 ERM으로 DB에서 조회하는 과정 추가예정)
-        { 
-            aid:'1', 
-            title:'조회된 게시글 1 제목입니다.', 
-            contents:'조회된 게시글 1 내용입니다', 
-            view_cnt:1, 
-            display_yn:'N', 
-            regist_date:Date.now(), 
-            regist_user: 'mgl'
-        }, 
-        // articles를 1개만 넘겨주면 조회 버튼 클릭 시 1개의 게시글만 articles/list에 업데이트될것!
-        // { 
-        //     aid:'2', 
-        //     title:'게시글 2 제목입니다.', 
-        //     contents:'게시글 2 내용입니다', 
-        //     view_cnt:1, 
-        //     display_yn:'N', 
-        //     regist_date:Date.now(), 
-        //     regist_user: 'mgl2'
-        // }, 
-        // { 
-        //     aid:'3', 
-        //     title:'게시글 3 제목입니다.', 
-        //     contents:'게시글 3 내용입니다', 
-        //     view_cnt:1, 
-        //     display_yn:'N', 
-        //     regist_date:Date.now(), 
-        //     regist_user: 'mgl3'
-        // }, 
-    ];
+    // db에서 게시글 조회하기 
+    var articles = await db.Article.findAll({
+        where:{
+            title:title
+        }
+    });
+
+    // 전체 게시글 개수 가져오기(articles len찍는게 더 낫지만, 여기서는 count 메소드 튜토리얼을 위해 아래 구문 실행)
+    var totalCount = await db.Article.count({
+        where:{article_id:{[Op.gt]: 0}}, // ORM 오퍼레이터를 통해 0 보다 큰 데이터 컨디셔닝 
+    });
 
     // Step 3. 조회 결과 목록 데이터를 list.ejs 뷰에 전달하기 
-    res.render('article/list.ejs', {articles})
+    res.render('article/list.ejs', {articles, moment, totalCount})
 }); 
 
 // // -- Part1 --
 
-// 게시글 등록 웹페이지 get 요청/응답 처리 라우팅 메소드 
+// 게시글 등록 웹페이지 get 요청
 router.get('/create', async(req,res)=>{
     res.render('article/create.ejs')
 }); // 일단 get으로 등록 페이지를 렌더링하고 시작(localhost:3000/article/create)
@@ -103,16 +72,20 @@ router.post('/create', async(req, res)=>{ // localhost:3000/article/create
 
     // Step 2. form에서 전달된 사용자 입력값을 DB의 게시글 테이블에 저장
     // 모든 RDBMS는 INSERT를 통해 데이터를 테이블에 넣게 되어 있으며, 실제 저장된 데이터를 백엔드 호출 메소드로 반환해줌. 
-    // 여기서는 INSERT한 후 동일 데이터를 반환받은 게 article이라고 가정 
+    // 테이블에 저장할 데이터의 속성은 반드시 해당 모델의 속성명과 일치해야 함!!!
     var article = {
-        aid:'1', 
-        title:'새로 게시된 게시글 1 제목입니다.', 
-        contents:'새로 게시된 게시글 1 내용입니다', 
-        view_cnt:1, 
-        display_yn:'N', 
-        regist_date:Date.now(), 
-        regist_user: 'mgl'
+        board_type_code: 2,
+        title: title, 
+        article_type_code: 0,
+        contents: contents, 
+        view_count: 1, 
+        ip_address: '111.123.456.000',
+        is_display_code: display_yn,
+        reg_date: Date.now(), 
+        reg_member_id: 1
     }
+
+    var article = await db.Article.create(article); // SQL의 INSERT INTO와 동일 
 
     // 등록완료 후 게시글 리스트 페이지로 리다이렉팅
     // 뷰의 경로가 절대 아닌, 이동 희망하는 도메인을 뺀 주소 기입. 
@@ -123,17 +96,32 @@ router.post('/create', async(req, res)=>{ // localhost:3000/article/create
 
 // 단일 게시글 정보 확인 및 수정 페이지 요청, 응답 처리 라우팅 메소드 
 // url을 통해 파라미터 방식으로 값 전달하는 경우 와일드카드 설정해 두어야 함. (`:aid`로 번호를 추출해올 수 있도록 와일드카드 셋업)
+// localhost:3000/article/modify/1
 router.get('/modify/:aid', async(req, res)=>{
     var articleId = req.params.aid; // 게시글 고유 번호를 url에서 추출해옴. 
-    var article = { // 해당 게시글 번호에 해당하는 데이터를 게시글 테이블에서 조회해옴. (여기서는 DB에서 가져왔다고 가정)
-        aid:'1', 
-        title:'게시글 제목입니다.', 
-        contents:'게시글 내용입니다', 
-        view_cnt:1, 
-        display_yn:'N', 
-        regist_date:Date.now(), 
-        regist_user: 'mgl'
-    }; 
+    
+    // 게시글번호로 수정대상 글 조회 (방법 1.)
+    // var article = await db.Article.findOne({where:{
+    //     article_id:articleId
+    // }})
+
+    // 게시글번호로 수정대상 글 조회 (방법 2. ORM을 통해 SQL 쿼리로 가져오기)
+    // SQL 쿼리를 직접 전달하면 실행 결과가 배열 형태로 리턴 
+    var sqlQuery =`SELECT * FROM article WHERE article_id='${articleId}';`
+    var articles= await db.sequelize.query(sqlQuery,{
+            raw: true,
+            type: QueryTypes.SELECT,
+    });
+    
+    // 단일 게시글 추출하기 
+    var article = {};
+    
+    if (articles.length > 0){
+        article = articles[0];
+    }
+
+    // 조회수 1 더하기 적용
+    await db.Article.update({view_count:article.view_count+1}, {where:{article_id:articleId}})
 
     res.render('article/modify.ejs', {article}) // 단일 게시글 데이터(`article`)를 -> 게시글 수정 웹페이지 뷰(ejs)에 전달
 }); // localhost:3000/article/modify/1
@@ -142,12 +130,12 @@ router.get('/modify/:aid', async(req, res)=>{
 router.post('/modify/:aid', async(req, res)=>{
     // Step 1. 수정하려는 게시글 고유번호 추출 (2가지)
     //  - 방법 1: parameter값을 추출하는 방법 - 파라미터 방식으로 넘겨받는 경우는 req.params 활용
-    var aid = req.params.aid;
+    var articleId = req.params.aid;
     //  - 방법 2: form 태그 내 hidden 요소가 있으면 hidden 태그의 name 값으로 추출
     // var aid = req.body.aid;
 
     // Step 2. 사용자가 수정한 게시글 form 태그 내 요소값들을 추출
-    var title = req.body.aid;
+    var title = req.body.title;
     var contents = req.body.contents;
     var display_yn = req.body.display_yn;
 
@@ -155,8 +143,18 @@ router.post('/modify/:aid', async(req, res)=>{
     var article = {
         title, 
         contents, 
-        display_yn
+        is_display_code:display_yn, 
+        edit_date:Date.now(), 
+        edit_member_id:1
     }
+
+    // DB에 수정 처리 
+    var updated_cnt = await db.Article.update(article, {
+        where:{
+            article_id:articleId, 
+        }
+    })
+
     // Step 4. 수정 데이터가 DB에 반영 완료되면 게시글 목록 페이지로 이동
     res.redirect('/article/list')
 }); 
@@ -164,6 +162,18 @@ router.post('/modify/:aid', async(req, res)=>{
 // // -- Part3 --
 
 // // 선택 게시글 삭제 처리 요청 및 응답처리 라우팅 메소드 
-// router.get();
+router.get('/delete', async(req, res)=>{
+    // 게시글 고유번호 추출
+    var aid = req.query.aid;
+
+    // DB에서 해당 게시글 영구삭제
+    await db.Article.destroy({where:{
+        article_id:aid
+    }})
+
+    // 게시글 목록 페이지로 이동
+    res.redirect('/article/list')
+
+});
 
 module.exports = router;

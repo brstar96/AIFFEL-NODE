@@ -151,6 +151,7 @@
                             <div class="ibox-content">
                                 <div class="table-responsive">
 
+                                    <h1>*조회건수:<%=totalCount%></h1>
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
@@ -169,13 +170,13 @@
                                             <!-- 최근에는 이렇게 HTML 조작 부분을 FE를 통해 브라우저에서 수행하므로, 서버 부담이 경감되었음. -->
                                             <% for(var i=0; i<articles.length; i++) { %>
                                                 <tr>
-                                                    <td><a href="#"><%=articles[i].aid%></a></td>
-                                                    <td><a href="/article/modify/<%=articles[i].aid%>"><%=articles[i].title%></a></td>
-                                                    <td><%=articles[i].view_cnt%></td>
+                                                    <td><a href="#"><%=articles[i].article_id%></a></td>
+                                                    <td><a href="/article/modify/<%=articles[i].article_id%>"><%=articles[i].title%></a></td>
+                                                    <td><%=articles[i].view_count%></td>
                                                     <td><%=articles[i].ip_address%></td>
-                                                    <td><%=articles[i].display_yn%></td>
-                                                    <td><%=articles[i].regist_date%></td>
-                                                    <td><%=articles[i].regist_user%></td>
+                                                    <td><%=articles[i].is_display_code%></td>
+                                                    <td><%=moment(articles[i].reg_date).format("YYYY-MM-DD")%></td>
+                                                    <td><%=articles[i].reg_member_id%></td>
                                                 </tr>
                                             <% } %>
                                             

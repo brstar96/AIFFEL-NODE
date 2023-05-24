@@ -1,7 +1,12 @@
 const path = require('path');
 const Sequelize = require('sequelize');
-const env = process.env.NODE_ENV || 'development';
-const config = require(path.join(__dirname,'..','config','config.json'))[env];
+
+// 개발모드에 대한 환경 설정: .env파일 내에 NODE_ENV 키값을 추출, 모드 확인(development, test, production)
+const env = process.env.NODE_ENV || 'production';
+// const config = require(path.join(__dirname,'..','config','config.json'))[env];
+
+// 자바 모듈 기반으로 config 가져오기 
+const config = require('../config/config.js')[env]
 
 // DB Object
 const db= {};
@@ -17,6 +22,9 @@ db.Member = require('./member.js')(sequelize, Sequelize);
 
 // 게시글 모듈 파일 참조하고 db 속성 정의하기 
 db.Article = require('./article.js')(sequelize, Sequelize);
+
+// 관리자 계정 모듈 파일 참조하고 db 속성 정의하기 
+db.Admin = require('./admin.js')(sequelize, Sequelize);
 
 //db객체 외부로 노출하기
 module.exports = db;

@@ -32,8 +32,8 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.INTEGER,
             allowNull: false,
             comment: '조회수',
-    },
-    ip_address: {
+        },
+        ip_address: {
         type: DataTypes.STRING(50),
             allowNull: false,
             comment: '작성자IP주소',

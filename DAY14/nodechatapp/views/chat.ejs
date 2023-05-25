@@ -16,13 +16,24 @@
     var socket = io.connect('/');
     //전송버튼 클릭시 사용자 입력메시지를 서버에 특정 이벤트 기능으로 전송한다.
     $("#btnSend").click(function(){
-          var msg = $("#message").val();
-          var nickName = $("#nickname").val();
-          var sendMsg = `${nickName}:${msg}`;
-          socket.emit("broadcast",sendMsg);
+        var msg = $("#message").val();
+        var nickName = $("#nickname").val();
+        var sendMsg = `${nickName}:${msg}`; // 백틱 문자열로 msg 정의('창훈:메시지')
+          
+        // 서버 socket.js 파일로 메시지 전송
+        // socket.js 메시지 broadcast 수신기에 문자열 데이터 전송
+        // socket.emit('서버 이벤트 수신기 이름', '클라이언트에서 보내는 문자열')
+        socket.emit("broadcast",sendMsg);
     });
+
+    // 서버 socket.js에서 보내는 메시지를 받는 클라이언트 이벤트 수신기 기능 정의 
+    // 클라이언트 메시지 이벤트 수신기 이름: receiveAll
+    // 서버에서 전달해준 데이터를 receiveMsg로 받아옴. 
     socket.on("receiveAll",function(receiveMsg){
         console.log("메시지 수신기-데이터","receiveAll",receiveMsg);
+
+        // id=chatHistory인 ul 태그에 li태그를 추가. 
+        // li태그 텍스트 값으로 서버에서 전달된 메시지 receiveMsg 전달. 
         $("#chatHistory").append(`<li>${receiveMsg}</li>`);
     });
    </script></body>

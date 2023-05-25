@@ -15,6 +15,7 @@ router.get('/create', async(req, res)=>{
 });
 
 // 신규 관리자 계정 등록 API
+// localhost:3000/admin/create
 router.post('/create', async(req, res)=>{
     // step1: 관리자 계정 정보를 form 태그에서 추출
     var admin_id = req.body.admin_id

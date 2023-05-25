@@ -4,13 +4,14 @@ var moment = require('moment')
 var express = require('express')
 var router = express.Router();
 
+var {isLoggedIn} = require('./authorizeMiddleware.js')
 var db = require('../models/index.js');
 var { Op } = require('sequelize') // ORM 오퍼레이터 객체(조건연산자) 참조 
 const { QueryTypes} = db.sequelize;
 const article = require('../models/article.js');
 
 // 게시글 정보 조회 및 조회 결과 웹페이지 요청/응답 처리 라우팅 메소드 
-router.get('/list', async(req, res)=>{
+router.get('/list', isLoggedIn, async(req, res)=>{
     // DB 객체를 참조하기 (ORM operator 문법을 써야 DB 컨디셔닝 가능) 
     // SELECT article_id, title, ip_address, is_display_code, view_count, reg_date, reg_member_id FROM article
     // WHERE article_id > 0 ORDER BY view_count DESC;
@@ -57,7 +58,7 @@ router.post('/list', async(req, res)=>{ // localhost:3000/article/list
 // // -- Part1 --
 
 // 게시글 등록 웹페이지 get 요청
-router.get('/create', async(req,res)=>{
+router.get('/create', isLoggedIn, async(req,res)=>{
     res.render('article/create.ejs')
 }); // 일단 get으로 등록 페이지를 렌더링하고 시작(localhost:3000/article/create)
 

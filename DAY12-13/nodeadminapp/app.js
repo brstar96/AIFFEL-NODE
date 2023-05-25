@@ -4,6 +4,10 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+// express-session 패키지 참조
+var session = require('express-session');
+
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var articleRouter = require('./routes/article') // 기본 라우터 정의
@@ -17,6 +21,21 @@ require('dotenv').config()
 
 var app = express();
 sequelize.sync();
+
+// 서버 세션 구현 
+app.use(
+  session({ // 
+    resave: false, 
+    saveUninitialized: true, // 사용자가 로그인 후 서버 리소스를 요청할 때마다 세션 타임아웃 자동 증가. 
+    secret: "testsecret", // 보안 키값
+    cookie: {
+      httpOnly: true, // 발급된 쿠키가 HTTP 환경에서도 사용되도록 설정
+      secure: false, // 보안 쿠키 생성 옵션 (쿠키 안의 값을 난독화)
+      maxAge:1000 * 60 * 30 //5분동안 서버세션을 유지하겠다.(1000은 1초)
+    },
+  }),
+);
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

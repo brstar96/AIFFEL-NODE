@@ -24,7 +24,9 @@ module.exports = (server, app)=>{
 
         // test1 서버 이벤트 수신기 정의 
         socket.on('test1', async(data1, data2)=>{
-            io.emit('clientEvent1', data1, data2);
+            var msg = `${data1}:${data2}`
+            console.log('클라이언트에서 보내준 메시지 출력: ', msg);
+            io.emit('clientEvent1', msg);
         })
 
         // test2 정의 (수십개 파라미터를 주고받기 난감할때 JSON 사용)

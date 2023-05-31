@@ -42,16 +42,36 @@
                 // 서버 socket.js 내 특정 서버 이벤트 수신기로 데이터 전송(broadcast)
                 // socket.on('broadcast', function(msg)){io.emit('receiveAll', msg)}의 msg 부분으로 넘어감
                 // socket.emit('서버의 socket.js에 정의되어 있는 서버 소켓 이ㅁ벤트 수신기명', 전달할 데이터)
-                socket.emit('broadcast', msgData)
+                
+                // 다양한 방법으로 이벤트 수신기 호출 가능
+                // socket.emit('broadcast', msgData) // 방법 1
+                // socket.emit('test1', nickName, message) // 방법 2
+                var jsonMsgData = {
+                    'nickName': nickName,
+                    'msg': message
+                }
+                socket.emit('test2', jsonMsgData) // 방법3
                 console.log('서버로 데이터 전송 완료')
 
                 
             })
 
-            // 서버에서 호출하는 클라이언트 메시지 이벤트 수신기 정의
+            // 서버에서 호출하는 클라이언트 메시지 이벤트 수신기 예시 1
             socket.on('receiveAll', function(msgResult){
                 console.log('서버에서 receiveAll 이벤트 수신')
                 $('#chatHistory').append(`<li>${msgResult}</li>`)
+            })
+
+            // 서버에서 호출하는 클라이언트 메시지 이벤트 수신기 예시 2
+            socket.on('clientEvent1', function(msg1, msg2){
+                console.log('서버에서 clientEvent1 이벤트 수신')
+                $('#chatHistory').append(`<li>${msg1}:${msg2}</li>`)
+            })
+
+            // 서버에서 호출하는 클라이언트 메시지 이벤트 수신기 예시 3
+            socket.on('clientEvent2', function(msg1, msg2){
+                console.log('서버에서 clientEvent2 이벤트 수신')
+                $('#chatHistory').append(`<li>${msg1}:${msg2}</li>`)
             })
         </script>
     </body>

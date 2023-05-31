@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>모든 사용자 채팅하기</title>
+    </head>
+
+    <body>
+        <h1>소켓 서버와 연결된 모든 사용자간 채팅하기</h1>
+        대화명: <input type="text" id="nickName" value="창훈"/><br>
+        메시지: <input type="text" id="message"/><br/>
+        <input type="button" id="btnSend" value="전송"/><br/>
+
+        
+        <!-- 채팅 이력 보기 -->
+        <ul id="chatHistory">
+
+        </ul>
+
+        <!-- Jquery 참조 -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+        
+        <!-- 서버로부터 제공되는 socker.io 통신 모듈 파일 참조하기 -->
+        <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+        
+        <!-- 클라이언트->서버 연결 소켓 객체 정의 -->
+        <script>
+            // io 객체는 socker.io.js 파일 내에서 제공해주는, 서버 소켓과 연결 가능하게 해 주는 클라이언트 객체. 
+            // io.connect('소켓 서버 주소')를 호출하면 소켓 서버와 연결을 시도
+            var socket = io.connect('/'); // http://localhost:3000/랑 같음. 
+            console.log('서버 소켓과 연결됨')
+
+            // 전송버튼 클릭 시 사용자가 입력한 메시지를 서버의 특정 이벤트 기능으로 전송
+            $("#btnSend").click(function(){
+                var nickName = $('#nickName').val();
+                var message = $('#message').val();
+                var msgData = `${nickName}:${message}`
+                
+                // 클라이언트에서 디버깅해보기 (에디터의 중단점과 비슷한 기능: 개발자 도구 소스 탭으로 넘어가서 에디터처럼 사용가능)
+                // debugger;
+
+                // 서버 socket.js 내 특정 서버 이벤트 수신기로 데이터 전송(broadcast)
+                // socket.on('broadcast', function(msg)){io.emit('receiveAll', msg)}의 msg 부분으로 넘어감
+                // socket.emit('서버의 socket.js에 정의되어 있는 서버 소켓 이ㅁ벤트 수신기명', 전달할 데이터)
+                socket.emit('broadcast', msgData)
+                console.log('서버로 데이터 전송 완료')
+
+                
+            })
+
+            // 서버에서 호출하는 클라이언트 메시지 이벤트 수신기 정의
+            socket.on('receiveAll', function(msgResult){
+                console.log('서버에서 receiveAll 이벤트 수신')
+                $('#chatHistory').append(`<li>${msgResult}</li>`)
+            })
+        </script>
+    </body>
+</html>

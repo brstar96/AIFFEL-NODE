@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>모든 사용자 채팅하기</title>
+    </head>
+
+    <body>
+        <h1>채팅방 안에서 채팅하기</h1>
+        채팅방이름: <input type="text" id="channelId" value="channel1"/>
+        <button id="btnEntry">입장하기</button><br>
+        
+        대화명: <input type="text" id="nickName" value="창훈"/><br>
+        메시지: <input type="text" id="message"/><br/>
+        <input type="button" id="btnSend" value="전송"/><br/>
+
+        <!-- 채팅 이력 보기 -->
+        <ul id="chatHistory">
+
+        </ul>
+
+        <!-- Jquery 참조 -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+        
+        <!-- 서버로부터 제공되는 socket.io 통신 모듈 파일 참조하기 -->
+        <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+        
+        <!-- 클라이언트->서버 연결 소켓 객체 정의 -->
+        <script>
+            // 서버 소켓과 클라이언트 소켓 연결
+            var socket = io.connect('http://localhost:3000/')
+
+            // 채팅방 입장하기 
+            $('#btnEntry').click(function(){
+                // 채팅방 아이디 추출하기 
+                var channelId = $('#channelId').val()
+                var nickName = $('#nickName').val()
+
+                // 서버 이벤트 수신기 정의하기: 서버의 socket.js 내 'entry' 이벤트 수신기를 호출. 
+                socket.emit('entry', channelId, nickName)
+            })
+
+            // 채팅방 입장 완료 메시지 클라이언트 이벤트 수신기 기능정의 
+            socket.on('entryOk', function(msgData){
+                $('#chatHistory').append(`<li>${msgData}</li>`)
+            })
+
+            // 채팅방 사용자들에게 메시지 전송하기 (btnSend가 눌렀을때 발동)
+            $('btnSend').click(function(){
+                var channelId = $('#channelId').val()
+                var nickName = $('#nickName').val()
+                var message = $('#message').val()
+
+                var jsonMsgData = {
+                    'channelId': channelId,
+                    'nickName': nickName,
+                    'message': message
+                }
+
+                // 서버 그룹채팅 이벤트 수신기 호출하기
+                socket.emit('send', jsonMsgData)
+            })
+
+            // 그룹채팅 클라이언트 메시지 수신기 기능정의 
+            // jsonMsgData가 socket.js 서버로 갔다가 모든 사용자에게 전달되는 파이프라인 
+            socket.on('recriveGroupMsg', function(data){
+                $('#chatHistory').append(`<li>${data.nickName}:${data.message}</li>`)
+            })
+
+            // 서버 소켓에 연결된 모든 사용자들이 메시지를 수신할 수 있도록 이벤트 수신기를 정의한다.
+            socket.on('clientEvent1', function(msg1, msg2){
+                $('#chatHistory').append(`<li>${msg1}:${msg2}</li>`
+            })
+
+        </script>
+    </body>
+</html>

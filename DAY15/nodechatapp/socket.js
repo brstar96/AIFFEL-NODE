@@ -12,6 +12,11 @@ module.exports = (server, app)=>{
     // 모든 클라이언트와 서버 소켓간의 통신 처리는 connection 이벤트 안에서 구현
     io.on('connection', (socket)=>{
 
+        // 클라이언트사이드에서 비자발적으로 서버 소켓이 끊어지는 경우 발생하는 이벤트(자동실행)
+        socket.on('disconnect', async()=>{
+            console.log('비정상적으로 연결이 종료되었습니다. connectionID:', socket.id)
+        })
+
         // 첫 번째 기능: 'broadcast' 서버사이드 이벤트 수신기가 호출되었을 때 function 콜백 실행 
         // socket.on("서버이벤트수신기명", 클라이언트->서버 이벤트로 전달되는 파라미터 처리 콜백함수)
         socket.on("broadcast", function(msg){
@@ -53,6 +58,23 @@ module.exports = (server, app)=>{
         socket.on('send', async(data)=>{
             // 지정 채널에만 메시지 전송 (나를 포함한 모든 접속자) -> io.to(channelId).emit('클라이언트 이벤트 수신기명', 클라이언트에 보낼 메시지 데이터)
             io.to(data.channelId).emit('receiveGroupMsg', data)
+        })
+
+        // 채팅방 퇴장 처리하기
+        socket.on('exit', async(channelId, nickName)=>{
+            // 현재 접속자를 지정한 채널에서 퇴장 처리
+            socket.leave(channelId)
+
+            socket.emit('leaveOk', `${channelId} 채팅방을 퇴장했습니다.`); // 나한테만 전송
+            socket.to(channelId).emit('leaveOk', `${nickName}님이 채팅방을 퇴장하셨습니다.`) // 나빼고 전부 전송 
+
+        })
+
+        // 연결된 소켓 종료하기 
+        socket.on('goodbye', async()=>{
+            socket.disconnect();
+            console.log('연결이 종료되었습니다.')
+
         })
     })
 

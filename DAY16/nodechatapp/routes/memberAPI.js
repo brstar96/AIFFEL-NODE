@@ -145,7 +145,7 @@ router.get('/profile',async(req,res)=>{
         }else{
             console.log('토큰이 있음')
             // STEP2. JWT 토큰에서 메일 주소 추출
-            var currentMember = jwt.verify(token, process.env.JWT_KEY);
+            var currentMember = jwt.verify(token, process.env.JWT_KEY); 
             console.log("토큰에서 추출한 사용자 정보", currentMember);
 
             // 현재 사용자의 이메일 주소 추출

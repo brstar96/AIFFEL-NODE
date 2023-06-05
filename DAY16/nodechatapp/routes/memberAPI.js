@@ -7,8 +7,6 @@ var jwt = require('jsonwebtoken');
 
 //db객체 참조 
 var db = require('../models/index');
-const e = require('express');
-
 
 //신규회원 가입 처리 REST API 라우팅 메소드
 //localhost:3000/api/member/signup
@@ -49,7 +47,7 @@ router.post('/signup', async(req, res, next)=> {
     }catch(Error){
         //서버파일시스템에 로깅파일로 저장합니다.
         result.code = 500;
-        result.msg = "서버에러 발생 관리자에게 문의하세요.";
+        result.msg = "서버에러 발생 관리자에게 문의하세요1.";
     }
 
     res.json(result);
@@ -114,7 +112,7 @@ router.post('/login',async(req,res)=>{
 
     }catch(Error){
         result.code = 500;
-        result.msg = "서버에러 발생 관리자에게 문의하세요.";
+        result.msg = "서버에러 발생 관리자에게 문의하세요2.";
     }
 
     res.json(result);
@@ -138,14 +136,16 @@ router.get('/profile',async(req,res)=>{
         console.log("프론트제공 jwt토큰", token);
 
         if (token == undefined){ // 토큰이 없는 경우 
+            console.log('토큰이 없음')
             result.code = '404';
             result.data = []
             result.msg = 'Token not exist.'
 
             return res.json(result)
         }else{
+            console.log('토큰이 있음')
             // STEP2. JWT 토큰에서 메일 주소 추출
-            var currentMember = jwt.verify(token, process.env.JWT_SECRET);
+            var currentMember = jwt.verify(token, process.env.JWT_KEY);
             console.log("토큰에서 추출한 사용자 정보", currentMember);
 
             // 현재 사용자의 이메일 주소 추출
@@ -161,7 +161,7 @@ router.get('/profile',async(req,res)=>{
         }
     }catch(Error){
         result.code = 500;
-        result.msg = "서버에러 발생 관리자에게 문의하세요.";
+        result.msg = "서버에러 발생 관리자에게 문의하세요3.";
     }
 
     // STEP4. 조회결과 데이터 반환 

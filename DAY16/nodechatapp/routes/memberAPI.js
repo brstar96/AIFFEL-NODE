@@ -168,4 +168,11 @@ router.get('/profile',async(req,res)=>{
     res.json(result)
 });
 
+// 모든 회원정보 조회 (CORS 테스트용 REST API)
+// localhost:3000/api/member/all
+router.get('/all', async(req,res)=>{
+    var members = await db.Member.findAll();
+    res.json(members)
+})
+
 module.exports = router;

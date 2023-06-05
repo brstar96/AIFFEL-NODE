@@ -501,8 +501,8 @@
 											<a class="dropdown-item offline" href="#">Offline</a>
 										</div>
 									</div>
-									<h5>Jennifer Lopezx</h5>
-									<h6>Bern, Switzerland</h6>
+									<h5 id="name">Jennifer Lopez</h5>
+									<h6 id="email">Bern, Switzerland</h6>
 								</div>
 								<!-- User profile end -->
 
@@ -1928,12 +1928,50 @@
 		<!-- *************
 			************ Vendor Js Files *************
 		************* -->
+
 		<!-- Slimscroll JS -->
 		<script src="vendor/slimscroll/slimscroll.min.js"></script>
 		<script src="vendor/slimscroll/custom-scrollbar.js"></script>
 
 		<!-- Main Js Required -->
 		<script src="js/main.js"></script>
+
+		<script>
+			// #profile-tab id를 갖는 프로필 아이콘 클릭 시 현재 로그인한 사용자 프로필 페이지로 이동
+			$('#profile-tab').click(function(){
+				
+				// localStorage 영역에 저장되어 있는 key를 이용, JWT 토큰 value 조회
+				var storageToken = localStorage.getItem('mglauthtoken');
+				
+				$.ajax({ // $.ajax는 $.get과 같은 메소드
+					type:"GET",
+					url:"/api/member/profile",
+					headers:{ // 헤더에 JWT 토큰을 담아서 전달 
+					'Authorization':'Bearer ' + storageToken
+					},
+					dataType:'json',
+					success:function(result){ // 조회 성공 시 function에 result라는 이름으로 전달
+						console.log("조회 반환결과:",result);
+						
+						if(result.code == "200"){
+							// 정상이므로 로직 처리
+							console.log('백엔드에서 전달된 사용자 데이터 출력: ', result.data);
+							
+							// 화면상의 프로필 이름과 메일 주소 UI 요소에 데이터 바인딩 
+							$('#name').text(result.data.name)
+							$('#email').text(result.data.email)
+						}else{ // 비로그인 시 로그인 페이지로 이동 
+							// alert(result.msg);
+							location.href = '/login';
+						}
+					},
+					error:function(xhr,status,error){
+						console.error(error);
+					}
+				});
+			});
+
+		</script>
 
 	</body>
 </html>

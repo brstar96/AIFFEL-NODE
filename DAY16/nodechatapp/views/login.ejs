@@ -62,16 +62,16 @@
 									</a>
 									<h6>Welcome back,<br>Please login to your account.</h6>
 									<div class="field-wrapper">
-										<input type="email" autofocus>
+										<input type="email" id="email" autofocus>
 										<div class="field-placeholder">Email ID</div>
 									</div>
 									<div class="field-wrapper mb-3">
-										<input type="password">
+										<input type="password" id="password">
 										<div class="field-placeholder">Password</div>
 									</div>
 									<div class="actions">
 										<a href="forgot-password.html">Forgot password?</a>
-										<button type="submit" class="btn btn-primary">Login</button>
+										<button type="button" id="btnLogin" class="btn btn-primary">Login</button>
 									</div>
 								</div>
 								<div class="login-footer">
@@ -88,6 +88,38 @@
 		<!-- *************
 			************ Login container end *************
 		************* -->
+
+		<script src="js/jquery.min.js"></script>
+
+		<script>
+				$("#btnLogin").click(function(){
+					
+					var loginUser={
+						"email":$("#email").val(),
+						"password":$("#password").val()
+					};
+					console.log('loginUser: ', loginUser)
+
+					$.ajax({
+					url:"http://localhost:3000/api/member/login",
+					type:"POST",
+					data:loginUser,
+					success:function(res){
+						
+						console.log(res + 'res.code:', res.code);
+
+						if(res.code == 200){
+							//사용자 브라우저의 Local Storage영역에 서버에서 발급받은 토큰을 저장한다.
+							localStorage.setItem('mglauthtoken', res.data);
+							location.href ="/chat"; // 로그인 완료 시 chat 페이지로 이동 
+						}else{
+							alert("에러발생");
+						}
+					}
+					});
+				});
+
+		</script>
 
 	</body>
 </html>

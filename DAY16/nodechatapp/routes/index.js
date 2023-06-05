@@ -14,12 +14,12 @@ router.get('/chat', function(req, res, next) {
 
 // 로그인 페이지 (localhost:3000/login)
 router.get('/login', function(req, res, next) {
-  res.render('login');
+  res.render('login.ejs');
 });
 
 // 회원가입 페이지 (localhost:3000/signup)
 router.get('/signup', function(req, res, next) {
-  res.render('signup');
+  res.render('signup.ejs');
 });
 
 // JWT 토큰 데이터 형식 웹페이지  (localhost:3000/token)
@@ -76,5 +76,6 @@ router.get('/verify', function(req, res, next) {
 
   res.json(result);
 });
+
 
 module.exports = router;
